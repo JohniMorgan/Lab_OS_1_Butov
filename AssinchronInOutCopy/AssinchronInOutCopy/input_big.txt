@@ -1,0 +1,2 @@
+D:\INSTALL\ubuntu-20.04.5-desktop-amd64.iso
+D:\INSTALL\just-ubuntu
