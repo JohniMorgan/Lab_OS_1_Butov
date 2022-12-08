@@ -6,6 +6,49 @@
 #include <string>
 
 using namespace std;
+
+void decodeSystemFlags(DWORD flags) {
+    if (flags | FILE_CASE_SENSITIVE_SEARCH) 
+        cout << "* Volume supports vase-sensitive file names\n";
+    if (flags | FILE_CASE_PRESERVED_NAMES)
+        cout << "* Volume supports preserved case of file names when it places a name on disk\n";
+    if (flags | FILE_UNICODE_ON_DISK)
+        cout << "* Volume supports Unicode in file names as they appear on disk\n";
+    if (flags | FILE_PERSISTENT_ACLS)
+        cout << "* Volume preserves and enforces access control lists (ACL)\n";
+    if (flags | FILE_FILE_COMPRESSION)
+        cout << "* Volume supports file-based compression\n";
+    if (flags | FILE_VOLUME_QUOTAS)
+        cout << "* Volume supports disk quotas\n";
+    if (flags | FILE_SUPPORTS_SPARSE_FILES)
+        cout << "* Volume supports sparse files\n";
+    if (flags | FILE_SUPPORTS_REPARSE_POINTS)
+        cout << "* Volume supports reparse points\n";
+    if (flags | FILE_VOLUME_IS_COMPRESSED)
+        cout << "* Volume is a compressed volume\n";
+    if (flags | FILE_SUPPORTS_OBJECT_IDS)
+        cout << "* Volume supports object identifiers\n";
+    if (flags | FILE_SUPPORTS_ENCRYPTION)
+        cout << "* Volume supports the Encrypted File System (EFS)\n";
+    if (flags | FILE_NAMED_STREAMS)
+        cout << "* Volume supports named streams\n";
+    if (flags | FILE_READ_ONLY_VOLUME)
+        cout << "* Volume is read-only\n";
+    if (flags | FILE_SEQUENTIAL_WRITE_ONCE)
+        cout << "* Volume supports a single sequential write\n";
+    if (flags | FILE_SUPPORTS_TRANSACTIONS)
+        cout << "* Volume supports transactions\n";
+    if (flags | FILE_SUPPORTS_HARD_LINKS)
+        cout << "* Volume supports hard links\n";
+    if (flags | FILE_SUPPORTS_EXTENDED_ATTRIBUTES)
+        cout << "* Volume supports extended attributes\n";
+    if (flags | FILE_SUPPORTS_OPEN_BY_FILE_ID)
+        cout << "* Volume supports open by FileID.\n";
+    if (flags | FILE_SUPPORTS_USN_JOURNAL)
+        cout << "* Volume supports update sequence number (USN) journals\n";
+    if (flags | FILE_SUPPORTS_BLOCK_REFCOUNTING)
+        cout << "* Volume supports sharing logical clusters between files on the same volume\n";
+}
 /*Функция очистки потока ввода*/
 void cleanInStream();
 /*Доп. функция печати атрибутов*/
@@ -38,21 +81,21 @@ void getInformation(LPTSTR Drivers) {
     wprintf(L"%s", strBuff);
     cout << "\nType of selected Drive : ";
     switch (GetDriveType(strBuff)) {
-        case 0: 
-            cout << "Unnamed error";
-            break;
-        case DRIVE_REMOVABLE:
-            cout << "Removable drive";
-            break;
-        case DRIVE_FIXED:
-            cout << "Fixed drive";
-            break;
-        case DRIVE_REMOTE:
-            cout << "Remote drive";
-            break;
-        case DRIVE_CDROM:
-            cout << "CD-disk";
-            break;
+    case 0:
+        cout << "Unnamed error";
+        break;
+    case DRIVE_REMOVABLE:
+        cout << "Removable drive";
+        break;
+    case DRIVE_FIXED:
+        cout << "Fixed drive";
+        break;
+    case DRIVE_REMOTE:
+        cout << "Remote drive";
+        break;
+    case DRIVE_CDROM:
+        cout << "CD-disk";
+        break;
     }
     cout << endl;
     LPDWORD nClaster = new DWORD(), nSector = new DWORD(), nByte = new DWORD(), nTotalClaster = new DWORD();
@@ -64,8 +107,8 @@ void getInformation(LPTSTR Drivers) {
     cout << "\nFileSystem name: "; wprintf(L"%s", SystemName);
     cout << "\nSerial number: " << VSNumber;
     cout << "\nMax length filename: " << Length;
-    cout << "\nSpecific system flags: " << FileSF << endl;
-
+    cout << "\nSpecific system flags: \n";
+    decodeSystemFlags(FileSF);
     GetDiskFreeSpace(strBuff, nSector, nByte, nClaster, nTotalClaster);
     cout << "Free " << *nClaster << "/" << *nTotalClaster << " clasters.\nSectors per claster: ";
     cout << *nSector << ".\nBytes per sector: " << *nByte << ".\n\n";
